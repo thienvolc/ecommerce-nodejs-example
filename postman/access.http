@@ -1,0 +1,43 @@
+@uri=http://localhost:3000/api/v1
+@accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzkwYjc3MzEyOWI3MzllYWIyMzk0MmMiLCJlbWFpbCI6ImpvaG5AZ21haWwuY29tIiwiaWF0IjoxNzM3NTM3Mzk1LCJleHAiOjE3Mzc3MTAxOTV9.ywXzGB7Qf2py2dBb0YwkMBGnRPYotNSRX7UCUX2gsNM
+@refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzk0ZDFmOGVjYmRkM2E5NjMyOGY3YjIiLCJlbWFpbCI6ImpvaG5AZ21haWwuY29tIiwiaWF0IjoxNzM3ODA2MzM1LCJleHAiOjE3Mzg0MTExMzV9.GeROKvpgCJN53-NsgoUAw1uI8P9qOvaXw9rUbFSsCMQ
+@shopId=6795fd54b007868e6b46f2a9
+
+@apiKey=
+### shop signup
+POST {{uri}}/shop/signup
+Content-Type: application/json
+
+{
+    "name": "John Doe",
+    "email": "john@gmail.com",
+    "password": "123456"
+}
+
+### shop login
+POST {{uri}}/shop/login
+x-refresh-token: {{refreshToken}}
+Content-Type: application/json
+
+{
+    "email": "john@gmail.com",
+    "password": "123456"
+}
+
+### shop refresh token
+POST {{uri}}/shop/refresh-token
+x-refresh-token: {{refreshToken}}
+Content-Type: application/json
+
+{
+    "shopId": "{{shopId}}"
+}
+
+### shop logout
+POST {{uri}}/shop/logout
+x-refresh-token: {{refreshToken}}
+Content-Type: application/json
+
+{
+    "shopId": "{{shopId}}"
+}

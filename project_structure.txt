@@ -1,0 +1,76 @@
+.
+├── app.js
+├── config
+│   ├── db
+│   │   ├── DBConfigStrategy.js
+│   │   ├── DBType.js
+│   │   └── index.js
+│   ├── env
+│   │   ├── EnvironmentConfig.js
+│   │   ├── EnvironmentConfigFactory.js
+│   │   └── index.js
+│   ├── index.js
+│   └── jwt.js
+├── controllers
+│   ├── AuthController.js
+│   └── ShopController.js
+├── database
+│   ├── DBConnectionFactory.js
+│   ├── ProxyDBConnection.js
+│   ├── index.js
+│   ├── mongo
+│   │   ├── connection.js
+│   │   └── index.js
+│   ├── mysql
+│   │   ├── connection.js
+│   │   └── index.js
+│   └── redis
+│       ├── connection.js
+│       └── index.js
+├── helpers
+│   └── asyncErrorWrapper.js
+├── middlewares
+│   ├── authentication.js
+│   └── errorHandler.js
+├── models
+│   ├── RefreshTokenKey.js
+│   ├── Shop.js
+│   └── index.js
+├── repositories
+│   ├── RefreshTokenKeyRepo.js
+│   ├── ShopRepo.js
+│   └── index.js
+├── routes
+│   ├── AccessRoute.js
+│   └── index.js
+├── server.js
+├── services
+│   ├── AuthService.js
+│   ├── RefreshTokenKeyService.js
+│   └── ShopService.js
+├── utils
+│   ├── auth.js
+│   ├── decorators.js
+│   ├── http
+│   │   ├── constants
+│   │   │   ├── httpResponseMessages.js
+│   │   │   ├── httpStatusCodes.js
+│   │   │   └── index.js
+│   │   └── index.js
+│   ├── jwt
+│   │   ├── index.js
+│   │   └── jwtHelper.js
+│   ├── mongooseUtils.js
+│   ├── objectUtils.js
+│   └── responses
+│       ├── customErrors.js
+│       ├── errorResponse.js
+│       ├── index.js
+│       ├── responseSender.js
+│       └── successResponse.js
+└── validators
+    ├── AuthValidator.js
+    ├── ShopValidator.js
+    └── index.js
+
+21 directories, 53 files
