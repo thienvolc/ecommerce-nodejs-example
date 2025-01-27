@@ -6,9 +6,10 @@ import { SHOP_DOCUMENT_NAME } from '../index.js';
 const COLLECTION_NAME = 'products';
 const DOCUMENT_NAME = 'Product';
 const ProductType = {
-    Clothing: CLOTHING_DOCUMENT_NAME,
-    Electronics: ELECTRONICS_DOCUMENT_NAME,
-    Furniture: FURNITURE_DOCUMENT_NAME,
+    CLOTHING: CLOTHING_DOCUMENT_NAME,
+    ELECTRONICS: ELECTRONICS_DOCUMENT_NAME,
+    FURNITURE: FURNITURE_DOCUMENT_NAME,
+    BASE: DOCUMENT_NAME,
 };
 
 const productSchema = new Schema(

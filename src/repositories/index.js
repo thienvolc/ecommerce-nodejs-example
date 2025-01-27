@@ -1,5 +1,7 @@
-export { default as ShopRepository } from './ShopRepo.js';
-export { default as RefreshTokenKeyRepository } from './RefreshTokenKeyRepo.js';
-export { default as ProductRepository } from './ProductRepo.js';
-export { default as CartRepository } from './CartRepo.js';
-export { default as DiscountRepository } from './Discount.js';
+export { default as CartRepository } from './CartRepository.js';
+export { default as DiscountRepository } from './DiscountRepository.js';
+
+export * from './Product/index.js';
+export { default as RefreshTokenKeyRepository } from './RefreshTokenKeyRepository.js';
+export { default as ShopRepository } from './ShopRepository.js';
+export { default as UserRepository } from './UserRepository.js';

@@ -29,14 +29,14 @@ class ProductController {
     // [GET] /product/:id
     static getProductById = async (req, res, next) => {
         const productId = req.params.id;
-        const metadata = await ProductService.findProduct(productId);
+        const metadata = await ProductService.getProductById(productId);
         const response = new OK({ message: 'Product retrieved successfully', metadata });
         ResponseSender.send(res, response);
     };
 
     // [GET] /product
     static getAllProducts = async (req, res, next) => {
-        const metadata = await ProductService.findAllProducts(req.query);
+        const metadata = await ProductService.getAllProducts(req.query);
         const response = new OK({ message: 'All products retrieved successfully', metadata });
         ResponseSender.send(res, response);
     };
