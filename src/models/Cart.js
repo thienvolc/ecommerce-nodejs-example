@@ -37,4 +37,4 @@ const cartSchema = new Schema(
     { collection: COLLECTION_NAME, timestamps: true },
 );
 
-export default model(DOCUMENT_NAME, cartSchema);
+export default Cart = model(DOCUMENT_NAME, cartSchema);

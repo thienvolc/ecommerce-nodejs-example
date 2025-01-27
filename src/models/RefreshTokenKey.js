@@ -38,4 +38,4 @@ const refreshTokenKeySchema = new Schema(
     { timestamps: true, collection: COLLECTION_NAME },
 );
 
-export const RefreshTokenKeyModel = model(DOCUMENT_NAME, refreshTokenKeySchema);
+export default RefreshTokenKeyModel = model(DOCUMENT_NAME, refreshTokenKeySchema);

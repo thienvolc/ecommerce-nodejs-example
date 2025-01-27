@@ -99,7 +99,7 @@ export default class DiscountService {
         return products;
     }
 
-    static async getAllListDiscountCodesbyShop({ limit, page, shopId }) {
+    static async getAllDiscountCodesbyShop({ limit, page, shopId }) {
         const discounts = await findAllDiscountCodesUnSelect({
             limit: +limit,
             page: +page,

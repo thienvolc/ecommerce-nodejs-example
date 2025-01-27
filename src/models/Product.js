@@ -84,6 +84,4 @@ const Clothing = model('Clothings', clothingSchema);
 const Electronic = model('Electronics', electronicSchema);
 const Furniture = model('Furnitures', furnitureSchema);
 
-export { productSchema };
-export { Clothing, Electronic, Furniture };
-export default Product;
+export { Product as defautl, Clothing, Electronic, Furniture, productSchema };

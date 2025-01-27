@@ -16,4 +16,4 @@ const inventorySchema = new Schema(
 
 inventorySchema.index({ inven_productId: 1, inven_shopId: 1 });
 
-export default model(DOCUMENT_NAME, inventorySchema);
+export default Inventory =  model(DOCUMENT_NAME, inventorySchema);

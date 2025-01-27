@@ -7,7 +7,7 @@ class ApikeyValidator {
     static validate = async (req, res, next) => {
         const apikey = this.extractApikeyFromHeaders(req.headers);
         const permissions = await ApikeyService.verify(apikey);
-        this.#attachPermissionToRequest(req, permissions);
+        this.attachPermissionToRequest(req, permissions);
         return next();
     };
 
@@ -19,7 +19,7 @@ class ApikeyValidator {
         return apikey;
     }
 
-    static #attachPermissionToRequest(req, permissions) {
+    static attachPermissionToRequest(req, permissions) {
         req.permissions = permissions;
     }
 }
@@ -30,7 +30,7 @@ class ApiPermission {
         this.checkPermission(permission, permissions);
         return next();
     };
-    
+
     static checkPermission = (requiredPermission, availablePermissions) => {
         if (!availablePermissions) {
             throw ForbiddenError('Invalid request permissions!');

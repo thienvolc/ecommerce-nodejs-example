@@ -1,37 +1,39 @@
 import CartService from '../services/CartService.js';
-import { OK, CREATED } from '../core/success.response.js';
 import { ResponseSender, CREATED, OK } from '../utils/responses/index.js';
+import { asyncErrorDecorator } from '../helpers/asyncErrorWrapper.js';
 
-export default class CartController {
-    createUserCart = async (req, res, next) => {
-        const response = new CREATED({
-            message: 'Create new cart successful',
-            metadata: await CartService.createUserCart(req.body),
-        });
+class CartController {
+    // [POST] /cart
+    static createUserCart = async (req, res, next) => {
+        const metadata = await CartService.createUserCart(req.body);
+
+        const response = new CREATED({ message: 'Create new cart successful', metadata });
         ResponseSender.send(res, response);
     };
 
-    updateUserCartQuantity = async (req, res, next) => {
-        const response = new OK({
-            message: 'Update cart quantity successful',
-            metadate: await CartService.updateUserCartQuantity(req.body),
-        });
+    // [GET] /cart
+    static getUserCartList = async (req, res, next) => {
+        const metadata = await CartService.getUserCartList(req.query);
+
+        const response = new OK({ message: 'Get carts list successful', metadata });
         ResponseSender.send(res, response);
     };
 
-    deleteUserCart = async (req, res, next) => {
-        const response = new OK({
-            message: 'Delete cart successful',
-            metadate: await CartService.deleteUserCart(req.body),
-        }).send(res);
+    // [PATCH] /cart
+    static updateUserCartQuantity = async (req, res, next) => {
+        const metadata = await CartService.updateUserCartQuantity(req.body);
+
+        const response = new OK({ message: 'Update cart quantity successful', metadata });
         ResponseSender.send(res, response);
     };
 
-    getUserCartList = async (req, res, next) => {
-        const response = new OK({
-            message: 'Get carts list successful',
-            metadate: await CartService.getUserCartList(req.query),
-        }).send(res);
+    // [DELETE] /cart
+    static deleteUserCart = async (req, res, next) => {
+        const metadata = await CartService.deleteUserCart(req.body);
+
+        const response = new OK({ message: 'Delete cart successful', metadata });
         ResponseSender.send(res, response);
     };
 }
+
+export default asyncErrorDecorator(CartController);

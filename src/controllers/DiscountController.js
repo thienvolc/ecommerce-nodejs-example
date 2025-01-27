@@ -1,66 +1,74 @@
-'use strict';
-
-import DiscountService from '../services/access.service.js';
-import { OK, CREATED } from '../core/success.response.js';
+import DiscountService from '../services/DiscountService.js';
+import { ResponseSender, CREATED, OK } from '../utils/responses/index.js';
+import { asyncErrorDecorator } from '../helpers/asyncErrorWrapper.js';
 
 class DiscountController {
-    
-    createDiscountCode = async (req, nes, next) => {
-        new CREATED({
-            message: 'Create code successful',
-            metadata: await DiscountService.createDiscountCode({
-                ...req.body,
-                shopId: req.user.useId,
-            }),
-        });
+    // [POST] /discount
+    static createDiscountCode = async (req, res, next) => {
+        const body = {
+            ...req.body,
+            ownerId: req.user.userId,
+        };
+        const metadata = await DiscountService.createDiscountCode(body);
+
+        const response = new CREATED({ message: 'Discount code created successfully', metadata });
+        ResponseSender.send(res, response);
     };
 
-    getAllDiscountCodes = async (req, nes, next) => {
-        new OK({
-            message: 'Get all code successful',
-            metadata: await DiscountService.getAllDiscountCodesWithProduct({
-                ...req.query,
-                shopId: req.user.useId,
-            }),
-        });
+    // [GET] /discount
+    static getAllDiscountCodes = async (req, res, next) => {
+        const body = {
+            ...req.query,
+            ownerId: req.user.userId,
+        };
+        const metadata = await DiscountService.getAllDiscountCodesWithProduct(body);
+
+        const response = new OK({ message: 'Fetched all discount codes successfully', metadata });
+        ResponseSender.send(res, response);
     };
 
-    getAllDiscountCodesByShop = async (req, nes, next) => {
-        new OK({
-            message: 'Get all code successful',
-            metadata: await DiscountService.getAllListDiscountCodesbyShop({
-                code: req.params.code,
-                shopId: req.user.useId,
-            }),
-        });
+    // [GET] /discount/shop/:code
+    static getDiscountCodesByShop = async (req, res, next) => {
+        const body = {
+            ...req.query,
+            ownerId: req.user.userId,
+        };
+        const metadata = await DiscountService.getAllListDiscountCodesByShop(body);
+
+        const response = new OK({ message: 'Fetched all discount codes by shop successfully', metadata });
+        ResponseSender.send(res, response);
     };
 
-    getDiscountAmout = async (req, nes, next) => {
-        new OK({
-            message: 'Get amount successful',
-            metadata: await DiscountService.getDiscountAmout({
-                ...req.body,
-            }),
-        });
+    // [POST] /discount/amount
+    static calculateDiscountAmount = async (req, res, next) => {
+        const metadata = await DiscountService.getDiscountAmount(req.body);
+
+        const response = new OK({ message: 'Calculated discount amount successfully', metadata });
+        ResponseSender.send(res, response);
     };
 
-    deleteDiscountCode = async (req, nes, next) => {
-        new OK({
-            message: 'Delete code successful',
-            metadata: await DiscountService.getAllDiscountCodesWithProduct({
-                codeId: req.body.codeId,
-                shopId: req.user.useId,
-            }),
-        });
+    // [DELETE] /discount
+    static deleteDiscountCode = async (req, res, next) => {
+        const body = {
+            codeId: req.body.codeId,
+            ownerId: req.user.userId,
+        };
+        const metadata = await DiscountService.deleteDiscountCode(body);
+
+        const response = new OK({ message: 'Deleted discount code successfully', metadata });
+        ResponseSender.send(res, response);
     };
 
-    cancelDiscountCode = async (req, nes, next) => {
-        new OK({
-            message: 'Cancel code successful',
-            metadata: await DiscountService.cancelDiscountCode({
-                codeId: req.body.codeId,
-                shopId: req.user.useId,
-            }),
+    // [PUT] /discount/cancel
+    static cancelDiscountCode = async (req, res, next) => {
+        const metadata = await DiscountService.cancelDiscountCode({
+            codeId: req.body.codeId,
+            ownerId: req.user.userId,
         });
+
+        const response = new OK({ message: 'Canceled discount code successfully', metadata });
+        ResponseSender.send(res, response);
     };
 }
+
+export default asyncErrorDecorator(DiscountController);

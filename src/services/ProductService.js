@@ -58,7 +58,8 @@ export default class ProductFactory {
         ProductFactory.productRegistry[type] = classRef;
     }
 
-    static async createProduct(type, payload) {
+    static async createProduct(payload) {
+        const type = payload.product_type;
         const productClass = ProductFactory.productRegistry[type];
         if (!productClass) throw new BadRequestError(`Invalid product type: ${type}`);
 

@@ -7,41 +7,71 @@ const shopSchema = new Schema(
     {
         name: {
             type: String,
-            required: true,
+            required: [true, 'Shop name is required'],
             unique: true,
-            index: true,
+            trim: true,
         },
-        email: {
+        description: {
             type: String,
-            required: true,
-            unique: true,
-            validate: {
-                validator: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value), // Simple email regex
-                message: (props) => `${props.value} is not a valid email address!`,
+            maxlength: [500, 'Description cannot exceed 500 characters'],
+            maxlength: 500,
+        },
+        logo: {
+            type: String,
+            trim: true,
+        },
+        banner: {
+            type: String,
+        },
+        location: {
+            type: String,
+            maxlength: [250, 'Location cannot exceed 250 characters'],
+            maxlength: 250,
+        },
+        ownerId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: [true, 'Shop owner is required'],
+        },
+        contact: {
+            email: {
+                type: String,
+                trim: true,
+                lowercase: true,
+                validate: {
+                    validator: (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+                    message: 'Invalid email format',
+                },
+            },
+            phone: {
+                type: String,
+                validate: {
+                    validator: (phone) => /^\+?[0-9]{7,15}$/.test(phone),
+                    message: 'Invalid phone number format',
+                },
             },
         },
-        password: {
-            type: String,
-            required: true,
-            minlength: [6, 'Password must be at least 6 characters long.'],
+        products: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Product',
+            },
+        ],
+        rating: {
+            type: Number,
+            min: [0, 'Rating cannot be less than 0'],
+            max: [5, 'Rating cannot exceed 5'],
+            default: 0,
         },
-        status: {
-            type: String,
-            enum: ['active', 'inactive'],
-            default: 'active',
-        },
-        verify: {
+        isActive: {
             type: Boolean,
-            default: false,
-        },
-        roles: {
-            type: [String],
-            default: ['shopOwner'],
+            default: true,
         },
     },
     { timestamps: true, collection: COLLECTION_NAME },
 );
 
-shopSchema.index({ email: 1 });
+shopSchema.index({ name: 1, ownerId: 1 }, { unique: true });
+shopSchema.index({ 'contact.email': 1 });
 
-export default model(DOCUMENT_NAME, shopSchema);
+export default Shop = model(DOCUMENT_NAME, shopSchema);

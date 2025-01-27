@@ -51,5 +51,5 @@ const ApikeySchema = new Schema(
 
 ApikeySchema.index({ status: 1 });
 
-export default model(DOCUMENT_NAME, ApikeySchema);
+export default ApiKey = model(DOCUMENT_NAME, ApikeySchema);
 export { Permissions };

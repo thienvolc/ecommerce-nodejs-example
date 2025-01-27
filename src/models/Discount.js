@@ -86,4 +86,4 @@ const discountSchema = new Schema(
     { timestamps: true, collection: COLLECTION_NAME },
 );
 
-export default model(DOCUMENT_NAME, discountSchema);
+export default Discount = model(DOCUMENT_NAME, discountSchema);

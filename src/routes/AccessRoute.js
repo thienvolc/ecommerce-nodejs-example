@@ -4,10 +4,10 @@ import { Router } from 'express';
 
 const router = Router();
 
-// Start with api/v1/shop/
-router.post('/signup', validateShopSignup, AuthController.signup);
-router.post('/login', validateShopLogin, AuthController.login);
-router.post('/logout', AuthController.logout);
-router.post('/refresh-token', AuthController.handleRefreshToken);
+router.route('/user')
+    .post('/signup', validateShopSignup, AuthController.signup)
+    .post('/login', validateShopLogin, AuthController.login)
+    .post('/refresh-token', AuthController.handleRefreshToken)
+    .post('/logout', AuthController.logout);
 
 export default router;
