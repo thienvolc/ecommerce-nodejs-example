@@ -41,3 +41,4 @@ const shopSchema = new Schema(
 shopSchema.index({ email: 1 });
 
 export default User = model(DOCUMENT_NAME, shopSchema);
+export { DOCUMENT_NAME as USER_DOCUMENT_NAME };

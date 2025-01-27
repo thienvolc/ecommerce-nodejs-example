@@ -1,4 +1,5 @@
 import { model, Schema } from 'mongoose';
+import { SHOP_DOCUMENT_NAME } from './index.js';
 
 const COLLECTION_NAME = 'refreshTokenKeys';
 const DOCUMENT_NAME = 'RefreshTokenKey';
@@ -8,7 +9,7 @@ const refreshTokenKeySchema = new Schema(
         shopId: {
             type: Schema.Types.ObjectId,
             required: true,
-            ref: 'Shop',
+            ref: SHOP_DOCUMENT_NAME,
             index: true,
         },
         publicKey: {

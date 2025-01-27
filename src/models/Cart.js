@@ -1,5 +1,6 @@
 import { model, Schema } from 'mongoose';
-import { productSchema } from './Product.js';
+import { productSchema } from './Product/index.js';
+import { USER_DOCUMENT_NAME } from './index.js';
 
 const DOCUMENT_NAME = 'Cart';
 const COLLECTION_NAME = 'carts';
@@ -32,7 +33,7 @@ const cartSchema = new Schema(
                 message: 'Product count does not match the number of items in the cart',
             },
         },
-        cart_userId: { type: Schema.Types.ObjectId, required: true, ref: 'User', index: true },
+        cart_userId: { type: Schema.Types.ObjectId, required: true, ref: USER_DOCUMENT_NAME, index: true },
     },
     { collection: COLLECTION_NAME, timestamps: true },
 );

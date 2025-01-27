@@ -1,15 +1,22 @@
 import { model, Schema } from 'mongoose';
-import { createProductSlugFromName } from './../utils/mongooseUtils.js';
+import { createProductSlugFromName } from '../../utils/mongooseUtils.js';
+import { CLOTHING_DOCUMENT_NAME, ELECTRONICS_DOCUMENT_NAME, FURNITURE_DOCUMENT_NAME } from './index.js';
+import { SHOP_DOCUMENT_NAME } from '../index.js';
 
 const COLLECTION_NAME = 'products';
 const DOCUMENT_NAME = 'Product';
+const ProductType = {
+    Clothing: CLOTHING_DOCUMENT_NAME,
+    Electronics: ELECTRONICS_DOCUMENT_NAME,
+    Furniture: FURNITURE_DOCUMENT_NAME,
+};
 
 const productSchema = new Schema(
     {
-        product_shopId: { type: Schema.Types.ObjectId, ref: 'Shop' },
+        product_shopId: { type: Schema.Types.ObjectId, ref: SHOP_DOCUMENT_NAME },
         isDraft: { type: Boolean, default: true, index: true, select: false },
         isPublished: { type: Boolean, default: false, index: true, select: false },
-        product_type: { type: String, required: true, enum: ['Electronics', 'Clothing', 'Furniture'] },
+        product_type: { type: String, required: true, enum: Object.values(ProductType) },
         product_price: { type: Number, required: true, min: [0, 'Price must be positive'] },
         product_quantity: { type: Number, required: true, min: [0, 'Quantity must be positive'] },
         product_attributes: { type: Schema.Types.Mixed, required: true },
@@ -49,39 +56,5 @@ productSchema.pre('save', function (next) {
     next();
 });
 
-const clothingSchema = new Schema(
-    {
-        product_shopId: { type: Schema.Types.ObjectId, ref: 'Shop' },
-        brand: { type: String, require: true },
-        size: String,
-        material: String,
-    },
-    { collection: 'clothings', timestamps: true },
-);
-
-const electronicSchema = new Schema(
-    {
-        product_shopId: { type: Schema.Types.ObjectId, ref: 'Shop' },
-        manufacturer: { type: String, require: true },
-        model: String,
-        color: String,
-    },
-    { collection: 'electronics', timestamps: true },
-);
-
-const furnitureSchema = new Schema(
-    {
-        product_shopId: { type: Schema.Types.ObjectId, ref: 'Shop' },
-        brand: { type: String, require: true },
-        size: String,
-        material: String,
-    },
-    { collection: 'furnitures', timestamps: true },
-);
-
-const Product = model(DOCUMENT_NAME, productSchema);
-const Clothing = model('Clothings', clothingSchema);
-const Electronic = model('Electronics', electronicSchema);
-const Furniture = model('Furnitures', furnitureSchema);
-
-export { Product as defautl, Clothing, Electronic, Furniture, productSchema };
+export default Product = model(DOCUMENT_NAME, productSchema);
+export { DOCUMENT_NAME as PRODUCT_DOCUMENT_NAME, ProductType };

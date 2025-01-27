@@ -1,4 +1,5 @@
 import { model, Schema } from 'mongoose';
+import { USER_DOCUMENT_NAME, PRODUCT_DOCUMENT_NAME } from './index.js';
 
 const COLLECTION_NAME = 'shops';
 const DOCUMENT_NAME = 'Shop';
@@ -30,7 +31,7 @@ const shopSchema = new Schema(
         },
         ownerId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
+            ref: USER_DOCUMENT_NAME,
             required: [true, 'Shop owner is required'],
         },
         contact: {
@@ -54,7 +55,7 @@ const shopSchema = new Schema(
         products: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'Product',
+                ref: PRODUCT_DOCUMENT_NAME,
             },
         ],
         rating: {
@@ -75,3 +76,4 @@ shopSchema.index({ name: 1, ownerId: 1 }, { unique: true });
 shopSchema.index({ 'contact.email': 1 });
 
 export default Shop = model(DOCUMENT_NAME, shopSchema);
+export { DOCUMENT_NAME as SHOP_DOCUMENT_NAME };

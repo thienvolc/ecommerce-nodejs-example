@@ -1,4 +1,5 @@
 import { model, Schema } from 'mongoose';
+import { USER_DOCUMENT_NAME, SHOP_DOCUMENT_NAME, PRODUCT_DOCUMENT_NAME } from './index.js';
 
 const DOCUMENT_NAME = 'Discount';
 const COLLECTION_NAME = 'discounts';
@@ -57,14 +58,14 @@ const discountSchema = new Schema(
         discount_users_used_ids: {
             type: [Schema.Types.ObjectId],
             default: [],
-            ref: 'User',
+            ref: USER_DOCUMENT_NAME,
         },
         discount_max_uses_per_user: {
             type: Number,
             required: true,
             min: [1, 'Max uses per user must be at least 1'],
         },
-        discount_shopId: { type: Schema.Types.ObjectId, ref: 'Shop', required: true, index: true },
+        discount_shopId: { type: Schema.Types.ObjectId, ref: SHOP_DOCUMENT_NAME, required: true, index: true },
         discount_is_active: { type: Boolean, default: true },
         discount_applies_to: {
             type: String,
@@ -74,7 +75,7 @@ const discountSchema = new Schema(
         discount_product_ids: {
             type: [Schema.Types.ObjectId],
             default: [],
-            ref: 'Product',
+            ref: PRODUCT_DOCUMENT_NAME,
             validate: {
                 validator: function (value) {
                     return this.discount_applies_to === 'specific' ? value.length > 0 : true;

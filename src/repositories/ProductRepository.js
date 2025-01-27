@@ -8,6 +8,7 @@ import {
     generateUnselectProjectionForFields,
     extractFieldsFromObject,
 } from '../utils/mongooseUtils.js';
+import { Product } from '../models/index.js';
 
 import { getSelectData, getUnSelectData } from '../../utils/index.js';
 import { productModel } from '../product.model.js';
