@@ -12,6 +12,11 @@ const createProductSlugFromName = (name) => {
 
 const isObject = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
 
+const convertToUpdateNestedObject = (product) => {
+    const updatedProduct = updateNestedObjectParser(product);
+    return removeNullAndUndefinedProperties(updatedProduct);
+};
+
 const updateNestedObjectParser = (obj) => {
     const final = {};
 
@@ -55,6 +60,7 @@ const extractFieldsFromObject = ({ fields = [], object = {} }) => _.pick(object,
 export {
     castMongooseObjectId,
     createProductSlugFromName,
+    convertToUpdateNestedObject,
     updateNestedObjectParser,
     removeNullAndUndefinedProperties,
     isValidObject,

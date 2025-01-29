@@ -1,3 +1,2 @@
-export * from './RepositoryManagers/index.js';
-export * from './Utils/index.js';
-export { default as ProductRepositoryBridge } from './ProductRepositoryBridge.js';
+import { default as ProductRepositoryFactory, ProductRepository } from './ProductRepositoryFactory.js';
+import { default as ModelBridgeFactory, ProductType } from './ModelBridgeFactory.js';
