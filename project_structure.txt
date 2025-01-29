@@ -10,10 +10,15 @@
 │   │   ├── EnvironmentConfigFactory.js
 │   │   └── index.js
 │   ├── index.js
-│   └── jwt.js
+│   └── jwt
+│       ├── index.js
+│       └── jwt.js
 ├── controllers
+│   ├── ApikeyController.js
 │   ├── AuthController.js
-│   └── ShopController.js
+│   ├── CartController.js
+│   ├── DiscountController.js
+│   └── ProductController.js
 ├── database
 │   ├── DBConnectionFactory.js
 │   ├── ProxyDBConnection.js
@@ -30,26 +35,63 @@
 ├── helpers
 │   └── asyncErrorWrapper.js
 ├── middlewares
+│   ├── apiKeyValidator.js
 │   ├── authentication.js
 │   └── errorHandler.js
 ├── models
+│   ├── Apikey.js
+│   ├── Cart.js
+│   ├── Discount.js
+│   ├── Inventory.js
+│   ├── Product
+│   │   ├── Clothing.js
+│   │   ├── Electronics.js
+│   │   ├── Furniture.js
+│   │   ├── Product.js
+│   │   └── index.js
 │   ├── RefreshTokenKey.js
 │   ├── Shop.js
+│   ├── User.js
+│   ├── constants
+│   │   ├── apiPermission.js
+│   │   ├── collectionName.js
+│   │   ├── documentName.js
+│   │   ├── index.js
+│   │   └── productType.js
 │   └── index.js
 ├── repositories
-│   ├── RefreshTokenKeyRepo.js
-│   ├── ShopRepo.js
+│   ├── ApiKeyRepository.js
+│   ├── CartRepository.js
+│   ├── DiscountRepository.js
+│   ├── InventoryRepository.js
+│   ├── Product
+│   │   ├── ProductBaseRepository.js
+│   │   ├── ProductRepositoryBridgeStrategyFactory.js
+│   │   └── index.js
+│   ├── RefreshTokenKeyRepository.js
+│   ├── ShopRepository.js
+│   ├── UserRepository.js
 │   └── index.js
 ├── routes
 │   ├── AccessRoute.js
+│   ├── ApikeyRoute.js
+│   ├── CartRoute.js
+│   ├── DiscountRoute.js
+│   ├── ProductRoute.js
 │   └── index.js
 ├── server.js
 ├── services
+│   ├── ApikeyService.js
 │   ├── AuthService.js
+│   ├── CartService.js
+│   ├── DiscountService.js
+│   ├── InventoryService.js
+│   ├── ProductService.js
 │   ├── RefreshTokenKeyService.js
-│   └── ShopService.js
+│   ├── ShopService.js
+│   └── UserService.js
 ├── utils
-│   ├── auth.js
+│   ├── authUtils.js
 │   ├── decorators.js
 │   ├── http
 │   │   ├── constants
@@ -70,7 +112,6 @@
 │       └── successResponse.js
 └── validators
     ├── AuthValidator.js
-    ├── ShopValidator.js
     └── index.js
 
-21 directories, 53 files
+25 directories, 90 files
