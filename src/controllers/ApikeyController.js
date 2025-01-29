@@ -3,6 +3,7 @@ import { asyncErrorDecorator } from '../helpers/asyncErrorWrapper.js';
 import { ResponseSender, CREATED, OK } from '../utils/responses/index.js';
 
 class ApikeyController {
+    // [POST] /apikey/generate
     static createReadWriteKey = async (req, res, next) => {
         const apikey = await ApikeyService.createReadWriteKey();
 

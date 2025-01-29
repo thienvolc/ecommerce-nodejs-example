@@ -27,8 +27,8 @@ class ApikeyValidator {
 
 class ApiPermission {
     static middleware = (permission) => (req, res, next) => {
-        // const permissions = req.permissions || [];
-        // this.checkPermission(permission, permissions);
+        const permissions = req.permissions || [];
+        this.checkPermission(permission, permissions);
         return next();
     };
 

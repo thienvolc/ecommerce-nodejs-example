@@ -6,7 +6,6 @@ export default class ApikeyRepository {
     }
 
     static async findByKey(key) {
-        console.log("🚀 ~ ApikeyRepository ~ findByKey ~ key:", key)
         return await Apikey.findOne({ key });
     }
 }

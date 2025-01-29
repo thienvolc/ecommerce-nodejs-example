@@ -1,81 +1,62 @@
-import { CartRepository } from '../repositories/index.js';
+import { CartRepository, ProductRepository } from '../repositories/index.js';
 import { NotFoundError } from '../utils/responses/index.js';
 
 export default class CartService {
-    static async createUserCart({ userId, product }) {
-        const query = { cart_userId: userId, cart_state: 'active' },
-            updateOrInsert = { $addtoSet: { cart_products: product } },
-            options = { upsert: true, new: true };
+    static createOrUpdateCart = async ({ userId, product }) => {
+        return await CartRepository.findOneAndUpdate(
+            { cart_userId: userId, cart_state: 'active' },
+            { $setOnInsert: { cart_userId, cart_state: 'active', cart_products: [product] } },
+            { upsert: true, new: true },
+        );
+    };
 
-        return await CartRepository.findOneAndUpdate(query, updateOrInsert, options);
+    static addToCart = async ({ userId, product }) => {
+        const userCart = await this.getUserCart({ userId });
+        return userCart
+            ? this.updateOrInsertProduct({ userCart, userId, product })
+            : this.createOrUpdateCart({ userId, product });
+    };
+
+    static updateOrInsertProduct = async ({ userCart, userId, product }) => {
+        return this.isProductExistInCart(userCart, product)
+            ? this.updateCartItemQuantity({ userId, product })
+            : this.pushProductToCart({ userId, product });
+    };
+
+    static isProductExistInCart(userCart, product) {
+        return userCart.cart_products.some((p) => p.productId === product.productId);
     }
 
-    static async updateUserCartQuantity({ userId, product }) {
-        const { productId, quantity } = product;
-        const query = { cart_userId: userId, 'cart_products.productId': productId, cart_state: 'active' },
-            updateOrInsert = { $inc: { 'cart_products.$.quantity': quantity } },
-            options = { upsert: true, new: true };
+    static updateCartItemQuantity = async ({ userId, product }) => {
+        return await CartRepository.findOneAndUpdate(
+            { cart_userId: userId, 'cart_products._id': product._id, cart_state: 'active' },
+            { $inc: { 'cart_products.$.product_quantity': product.product_quantity } },
+            { new: true },
+        );
+    };
 
-        return await CartRepository.findOneAndUpdate(query, updateOrInsert, options);
-    }
+    static pushProductToCart = async ({ userId, product }) => {
+        return await CartRepository.findOneAndUpdate(
+            { cart_userId: userId, cart_state: 'active' },
+            { $push: { cart_products: product } },
+            { new: true },
+        );
+    };
 
-    static async addToCart({ userId, product = {} }) {
-        const userCart = await CartRepository.findOne({ cart_userId: userId }).lean();
-        if (!userCart) {
-            //
-            return await this.createUserCart({ userId, product });
-        }
+    static validateProductOwnership = async ({ productId, shopId }) => {
+        const product = await ProductRepository.findById(productId);
+        if (!product) throw new NotFoundError('Product not found');
+        if (product.product_shopId.toString() !== shopId) throw new Error('Product does not belong to this shop');
+    };
 
-        //
-        if (!userCart.cart_products.length) {
-            userCart.cart_products = [product];
-            return await userCart.save();
-        }
+    static removeFromCart = async ({ userId, productId }) => {
+        return await CartRepository.updateOne(
+            { cart_userId: userId, cart_state: 'active' },
+            { $pull: { cart_products: { productId } } },
+        );
+    };
 
-        return this.updateUserCartQuantity({ userId, product });
-    }
-
-    /*
-        {
-            shopId,
-            item_products: {
-                {
-                    quantity,
-                    price,
-                    shopId,
-                    old_quantity,
-                    productId,
-                },
-                version
-            }
-        }
-    */
-
-    static async addToCartV2({ userId, product = {} }) {
-        const { productId, quantity, old_quantity } = shop_order_ids[0]?.item_products[0];
-        const foundProduct = await getProductId(productId);
-        if (!foundProduct) throw new NotFoundError('Not found product');
-        if (foundProduct.product_shop.toString() !== shop_order_ids[0].shopId);
-
-        if (quantity === 0) {
-            this.deleteUserCart({ userId, productId });
-        }
-
-        return await CartService.updateUserCartQuantity({
-            userId,
-            product: { productId, quantity: quantity - old_quantity },
-        });
-    }
-
-    static async deleteUserCart({ userId, productId }) {
-        const query = { cart_userId: userId, cart_state: 'active' },
-            updateSet = { $pull: { cart_products: { productId } } };
-
-        const deletedCart = await CartRepository.updateOne(query, updateSet);
-        return deletedCart;
-    }
-
-    static async getListUserCart({ userId }) {
-        return await CartRepository.findOne({ cart_userId: userId }).lean();
-    }
+    static getUserCart = async (userId) => {
+        return await CartRepository.findByUserId(userId);
+    };
 }

@@ -21,7 +21,7 @@ class CartController {
 
     // [PATCH] /cart
     static updateUserCartQuantity = async (req, res, next) => {
-        const metadata = await CartService.updateUserCartQuantity(req.body);
+        const metadata = await CartService.incrementProductQuantity(req.body);
 
         const response = new OK({ message: 'Update cart quantity successful', metadata });
         ResponseSender.send(res, response);

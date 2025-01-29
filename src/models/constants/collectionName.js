@@ -8,7 +8,7 @@ export default {
     CART: 'carts',
     DISCOUNT: 'discounts',
     INVENTORY: 'inventories',
-    REFRESH_TOKEN_KEY: 'refreshTokens',
+    REFRESH_TOKEN_KEY: 'refreshTokenKeys',
     SHOP: 'shops',
     USER: 'users',
 };
