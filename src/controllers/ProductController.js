@@ -87,4 +87,4 @@ class ProductController {
     };
 }
 
-export default asyncErrorDecorator(ProductController);
+export default asyncErrorDecorator.decorateAllStaticMethods(ProductController);

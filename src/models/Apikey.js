@@ -1,31 +1,7 @@
 import { model, Schema } from 'mongoose';
+import { Permissions, DocumentName, CollectionName } from './constants/index.js';
 
-const DOCUMENT_NAME = 'Apikey';
-const COLLECTION_NAME = 'apikeys';
-
-const Permissions = {
-    READ: '0000',
-    WRITE: '1111',
-    DELETE: '2222',
-    ADMIN: '3333',
-};
-
-Permissions.DESCRIPTIONS = {
-    [Permissions.READ]: 'read',
-    [Permissions.WRITE]: 'write',
-    [Permissions.DELETE]: 'delete',
-    [Permissions.ADMIN]: 'admin',
-};
-
-Permissions.getPermissionName = function (code) {
-    return this.DESCRIPTIONS[code] || 'unknown';
-};
-
-Permissions.isValidPermission = function (code) {
-    return Object.values(this).includes(code);
-};
-
-const ApikeySchema = new Schema(
+const apikeySchema = new Schema(
     {
         key: {
             type: String,
@@ -33,8 +9,10 @@ const ApikeySchema = new Schema(
             unique: true,
         },
         status: {
-            type: Boolean,
-            default: true,
+            type: String,
+            required: true,
+            enum: ['active', 'inactive'],
+            default: 'active',
         },
         permissions: {
             type: [String],
@@ -43,13 +21,9 @@ const ApikeySchema = new Schema(
             default: Permissions.READ,
         },
     },
-    {
-        timestamps: true,
-        collection: COLLECTION_NAME,
-    },
+    { timestamps: true, collection: CollectionName.API_KEY },
 );
 
-ApikeySchema.index({ status: 1 });
+apikeySchema.index({ status: 1 });
 
-export default ApiKey = model(DOCUMENT_NAME, ApikeySchema);
-export { Permissions };
+export default model(DocumentName.API_KEY, apikeySchema);

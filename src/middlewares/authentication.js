@@ -41,4 +41,4 @@ class AccessControl {
     };
 }
 
-export default authentication = asyncErrorWrapper(AccessControl.authenticate);
+export default asyncErrorWrapper(AccessControl.authenticate);

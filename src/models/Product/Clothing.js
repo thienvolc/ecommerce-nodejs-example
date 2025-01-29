@@ -1,18 +1,14 @@
 import { Schema, model } from 'mongoose';
-import { SHOP_DOCUMENT_NAME } from '../index.js';
-
-const COLLECTION_NAME = 'clothings';
-const DOCUMENT_NAME = 'Clothing';
+import { DocumentName, CollectionName } from '../constants/index.js';
 
 const clothingSchema = new Schema(
     {
-        product_shopId: { type: Schema.Types.ObjectId, ref: SHOP_DOCUMENT_NAME },
+        product_shopId: { type: Schema.Types.ObjectId, ref: DocumentName.SHOP, required: true },
         brand: { type: String, require: true },
         size: String,
         material: String,
     },
-    { collection: COLLECTION_NAME, timestamps: true },
+    { timestamps: true, collection: CollectionName.CLOTHING },
 );
 
-export default Clothing = model(DOCUMENT_NAME, clothingSchema);
-export { DOCUMENT_NAME as CLOTHING_DOCUMENT_NAME };
+export default model(DocumentName.CLOTHING, clothingSchema);

@@ -4,15 +4,17 @@ import authentication from '../middlewares/authentication.js';
 
 const router = Router();
 
-router.route('/discount')
-    .get('/shop/:id', DiscountController.getDiscountCodesByShop)
+router.get('/shop/:id', DiscountController.getDiscountCodesByShop);
 
-router.route('/discount')
-    .all(authentication)
+router.use(authentication);
+
+router.route('')
     .post(DiscountController.createDiscountCode)
     .get(DiscountController.getAllDiscountCodes)
-    .post('/amount', DiscountController.calculateDiscountAmount)
-    .put('/cancel', DiscountController.cancelDiscountCode)
     .delete(DiscountController.deleteDiscountCode);
+
+router
+    .post('/amount', DiscountController.calculateDiscountAmount)
+    .put('/cancel', DiscountController.cancelDiscountCode);
 
 export default router;

@@ -7,6 +7,7 @@ class ApikeyValidator {
     static validate = async (req, res, next) => {
         const apikey = this.extractApikeyFromHeaders(req.headers);
         const permissions = await ApikeyService.verify(apikey);
+
         this.attachPermissionToRequest(req, permissions);
         return next();
     };
@@ -14,7 +15,7 @@ class ApikeyValidator {
     static extractApikeyFromHeaders(headers) {
         const apikey = headers[Headers.API_KEY];
         if (!apikey) {
-            throw ForbiddenError('API Key is missing');
+            throw new ForbiddenError('API Key is missing');
         }
         return apikey;
     }
@@ -26,22 +27,22 @@ class ApikeyValidator {
 
 class ApiPermission {
     static middleware = (permission) => (req, res, next) => {
-        const permissions = req.permissions || [];
-        this.checkPermission(permission, permissions);
+        // const permissions = req.permissions || [];
+        // this.checkPermission(permission, permissions);
         return next();
     };
 
     static checkPermission = (requiredPermission, availablePermissions) => {
         if (!availablePermissions) {
-            throw ForbiddenError('Invalid request permissions!');
+            throw new ForbiddenError('Invalid request permissions!');
         }
 
         if (!requiredPermission) {
-            throw ForbiddenError('Missing required permission!');
+            throw new ForbiddenError('Missing required permission!');
         }
 
         if (!availablePermissions.includes(requiredPermission)) {
-            throw ForbiddenError('Permission denied!');
+            throw new ForbiddenError('Permission denied!');
         }
     };
 }

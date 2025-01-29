@@ -1,2 +1,2 @@
-import { default as ProductRepositoryFactory, ProductRepository } from './ProductRepositoryFactory.js';
-import { default as ModelBridgeFactory, ProductType } from './ModelBridgeFactory.js';
+export { default as ProductRepositoryBridgeStrategyFactory } from './ProductRepositoryBridgeStrategyFactory.js';
+export { default as ProductBaseRepository } from './ProductBaseRepository.js';

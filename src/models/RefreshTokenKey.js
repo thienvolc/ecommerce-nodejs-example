@@ -1,15 +1,12 @@
 import { model, Schema } from 'mongoose';
-import { SHOP_DOCUMENT_NAME } from './index.js';
-
-const COLLECTION_NAME = 'refreshTokenKeys';
-const DOCUMENT_NAME = 'RefreshTokenKey';
+import { DocumentName, CollectionName } from './constants/index.js';
 
 const refreshTokenKeySchema = new Schema(
     {
-        shopId: {
+        userId: {
             type: Schema.Types.ObjectId,
             required: true,
-            ref: SHOP_DOCUMENT_NAME,
+            ref: DocumentName.USER,
             index: true,
         },
         publicKey: {
@@ -30,13 +27,12 @@ const refreshTokenKeySchema = new Schema(
             type: [String],
             default: [],
             validate: {
-                validator: (tokens) => 
-                    tokens.every((token) => typeof token === 'string' && token.length > 0),
+                validator: (tokens) => tokens.every((token) => typeof token === 'string' && token.length > 0),
                 message: 'Used refresh tokens must be valid non-empty strings.',
             },
         },
     },
-    { timestamps: true, collection: COLLECTION_NAME },
+    { timestamps: true, collection: CollectionName.REFRESH_TOKEN_KEY },
 );
 
-export default RefreshTokenKeyModel = model(DOCUMENT_NAME, refreshTokenKeySchema);
+export default model(DocumentName.REFRESH_TOKEN_KEY, refreshTokenKeySchema);

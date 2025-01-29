@@ -1,0 +1,4 @@
+@uri=http://localhost:3000/api/v1
+@apikey=etsPlZ/cqnM9sa87rk78aC5lf9b5elyeeusRTYgIS4vvsNABBwEy1jtVm3M7IZxJDrGKJAXm3xDVzw1D7c6hNg==
+### genereate api key
+POST {{uri}}/apikey/generate

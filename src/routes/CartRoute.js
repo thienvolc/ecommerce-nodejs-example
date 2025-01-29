@@ -4,8 +4,9 @@ import authentication from '../middlewares/authentication.js';
 
 const router = Router();
 
-router.route('/cart')
-    .all(authentication)
+router.use(authentication);
+
+router.route('/')
     .post(CartController.createUserCart)
     .get(CartController.getUserCartList)
     .patch(CartController.updateUserCartQuantity)

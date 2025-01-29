@@ -1,20 +1,17 @@
 import { model, Schema } from 'mongoose';
+import { DocumentName, CollectionName } from './constants/index.js';
 
-const COLLECTION_NAME = 'users';
-const DOCUMENT_NAME = 'User';
-
-const shopSchema = new Schema(
+const userSchema = new Schema(
     {
         name: {
             type: String,
-            required: true,
-            unique: true,
             index: true,
         },
         email: {
             type: String,
             required: true,
             unique: true,
+            index: true,
             validate: {
                 validator: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value), // Simple email regex
                 message: (props) => `${props.value} is not a valid email address!`,
@@ -35,10 +32,9 @@ const shopSchema = new Schema(
             default: false,
         },
     },
-    { timestamps: true, collection: COLLECTION_NAME },
+    { timestamps: true, collection: CollectionName.USER },
 );
 
-shopSchema.index({ email: 1 });
+userSchema.index({ name: 'text' });
 
-export default User = model(DOCUMENT_NAME, shopSchema);
-export { DOCUMENT_NAME as USER_DOCUMENT_NAME };
+export default model(DocumentName.USER, userSchema);

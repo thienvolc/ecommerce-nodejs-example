@@ -1,20 +1,10 @@
 import { model, Schema } from 'mongoose';
+import { DocumentName, CollectionName, ProductType } from '../constants/index.js';
 import { createProductSlugFromName } from '../../utils/mongooseUtils.js';
-import { CLOTHING_DOCUMENT_NAME, ELECTRONICS_DOCUMENT_NAME, FURNITURE_DOCUMENT_NAME } from './index.js';
-import { SHOP_DOCUMENT_NAME } from '../index.js';
-
-const COLLECTION_NAME = 'products';
-const DOCUMENT_NAME = 'Product';
-const ProductType = {
-    CLOTHING: CLOTHING_DOCUMENT_NAME,
-    ELECTRONICS: ELECTRONICS_DOCUMENT_NAME,
-    FURNITURE: FURNITURE_DOCUMENT_NAME,
-    BASE: DOCUMENT_NAME,
-};
 
 const productSchema = new Schema(
     {
-        product_shopId: { type: Schema.Types.ObjectId, ref: SHOP_DOCUMENT_NAME },
+        product_shopId: { type: Schema.Types.ObjectId, ref: DocumentName.SHOP, required: true, index: true },
         isDraft: { type: Boolean, default: true, index: true, select: false },
         isPublished: { type: Boolean, default: false, index: true, select: false },
         product_type: { type: String, required: true, enum: Object.values(ProductType) },
@@ -45,7 +35,7 @@ const productSchema = new Schema(
             default: [],
         },
     },
-    { timestamps: true, collection: COLLECTION_NAME },
+    { timestamps: true, collection: CollectionName.PRODUCT },
 );
 
 productSchema.index({ product_name: 'text', product_desc: 'text' });
@@ -57,5 +47,5 @@ productSchema.pre('save', function (next) {
     next();
 });
 
-export default Product = model(DOCUMENT_NAME, productSchema);
-export { DOCUMENT_NAME as PRODUCT_DOCUMENT_NAME, ProductType };
+export default model(DocumentName.PRODUCT, productSchema);
+export { productSchema };

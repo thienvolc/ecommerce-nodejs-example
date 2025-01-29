@@ -4,8 +4,8 @@ import { Router } from 'express';
 
 const router = Router();
 
-router.route('/user')
-    .post('/signup', validateShopSignup, AuthController.signup)
+router
+    .post('/signup', validateShopLogin, AuthController.signup)
     .post('/login', validateShopLogin, AuthController.login)
     .post('/refresh-token', AuthController.handleRefreshToken)
     .post('/logout', AuthController.logout);

@@ -1,11 +1,12 @@
 @uri=http://localhost:3000/api/v1
 @accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzkwYjc3MzEyOWI3MzllYWIyMzk0MmMiLCJlbWFpbCI6ImpvaG5AZ21haWwuY29tIiwiaWF0IjoxNzM3NTM3Mzk1LCJleHAiOjE3Mzc3MTAxOTV9.ywXzGB7Qf2py2dBb0YwkMBGnRPYotNSRX7UCUX2gsNM
 @refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Nzk0ZDFmOGVjYmRkM2E5NjMyOGY3YjIiLCJlbWFpbCI6ImpvaG5AZ21haWwuY29tIiwiaWF0IjoxNzM3ODA2MzM1LCJleHAiOjE3Mzg0MTExMzV9.GeROKvpgCJN53-NsgoUAw1uI8P9qOvaXw9rUbFSsCMQ
-@shopId=6795fd54b007868e6b46f2a9
+@userId=679a1162873849536e033803
 
-@apiKey=
-### shop signup
-POST {{uri}}/shop/signup
+@apiKey=68k3tiOzQV6aPSyuSbGxJoS8DDt/3/YIB+FF83OEd44upPBy5fD5yo7u9yp5gtVjo+ni2bkstoMlc43OA+V3Sg==
+### user signup
+POST {{uri}}/user/signup
+x-api-key: {{apiKey}}
 Content-Type: application/json
 
 {
@@ -14,8 +15,8 @@ Content-Type: application/json
     "password": "123456"
 }
 
-### shop login
-POST {{uri}}/shop/login
+### user login
+POST {{uri}}/user/login
 x-refresh-token: {{refreshToken}}
 Content-Type: application/json
 
@@ -24,20 +25,20 @@ Content-Type: application/json
     "password": "123456"
 }
 
-### shop refresh token
-POST {{uri}}/shop/refresh-token
+### user refresh token
+POST {{uri}}/user/refresh-token
 x-refresh-token: {{refreshToken}}
 Content-Type: application/json
 
 {
-    "shopId": "{{shopId}}"
+    "userId": "{{userId}}"
 }
 
-### shop logout
-POST {{uri}}/shop/logout
+### user logout
+POST {{uri}}/user/logout
 x-refresh-token: {{refreshToken}}
 Content-Type: application/json
 
 {
-    "shopId": "{{shopId}}"
+    "userId": "{{userId}}"
 }

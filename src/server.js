@@ -4,7 +4,7 @@ import { ProxyDBConnection } from './database/index.js';
 
 const initializeApp = async () => {
     try {
-        // await ProxyDBConnection.establishConnection();
+        await ProxyDBConnection.establishConnection();
         const { host, port } = AppConfig;
         runApp(port, host);
     } catch (error) {

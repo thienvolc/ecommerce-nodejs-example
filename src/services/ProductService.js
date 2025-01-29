@@ -1,29 +1,43 @@
-import { ProductRepositoryBridge as ProductRepository } from '../repositories/index.js';
+import { ProductRepositoryBridgeStrategyFactory, ProductBaseRepository } from '../repositories/index.js';
 
 class ProductService {
     static createProduct = async (productDetails) => {
-        return await ProductRepository.create(productDetails);
+        const Repository = ProductRepositoryBridgeStrategyFactory.getStrategy(productType);
+        return await Repository.create(productDetails);
     };
 
     static updateProduct = async (productDetails) => {
-        return await ProductRepository.findByIdAndUpdate(productDetails.product_id, productDetails);
+        const Repository = ProductRepositoryBridgeStrategyFactory.getStrategy(productType);
+        return await Repository.findByIdAndUpdate(productDetails.product_id, productDetails);
     };
 
     static getProductById = async (productId) => {
-        return await ProductRepository.findById(productId);
+        return await ProductBaseRepository.findById(productId);
     };
 
-    static getAllProducts = async (query) => {};
+    static getAllProducts = async (query) => {
+        return await ProductBaseRepository.find(query);
+    };
 
-    static searchProducts = async (query) => {};
+    static searchProducts = async (search) => {
+        return await ProductBaseRepository.find(search);
+    };
 
-    static unPublishProductByShop = async (body) => {};
+    static unPublishProductByShop = async (body) => {
+        return await ProductBaseRepository.findByIdAndUpdate(body.product_id, { product_status: 'draft' });
+    };
 
-    static publishProductByShop = async (body) => {};
+    static publishProductByShop = async (body) => {
+        return await ProductBaseRepository.findByIdAndUpdate(body.product_id, { product_status: 'published' });
+    };
 
-    static findAllDraftsForShop = async (shopId) => {};
+    static findAllDraftsForShop = async (shopId) => {
+        return await ProductBaseRepository.find({ product_shopId: shopId, product_status: 'draft' });
+    };
 
-    static findAllPublishForShop = async (shopId) => {};
+    static findAllPublishForShop = async (shopId) => {
+        return await ProductBaseRepository.find({ product_shopId: shopId, product_status: 'published' });
+    };
 }
 
 export default ProductService;

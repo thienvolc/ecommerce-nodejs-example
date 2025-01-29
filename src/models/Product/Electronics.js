@@ -1,18 +1,14 @@
 import { Schema, model } from 'mongoose';
-import { SHOP_DOCUMENT_NAME } from '../index.js';
-
-const COLLECTION_NAME = 'electronics';
-const DOCUMENT_NAME = 'Electronics';
+import { DocumentName, CollectionName } from '../constants/index.js';
 
 const electronicsSchema = new Schema(
     {
-        product_shopId: { type: Schema.Types.ObjectId, ref: SHOP_DOCUMENT_NAME },
+        product_shopId: { type: Schema.Types.ObjectId, ref: DocumentName.SHOP, required: true },
         manufacturer: { type: String, require: true },
         model: String,
         color: String,
     },
-    { collection: COLLECTION_NAME, timestamps: true },
+    { timestamps: true, collection: CollectionName.ELECTRONICS },
 );
 
-export default Electronics = model(DOCUMENT_NAME, electronicsSchema);
-export { DOCUMENT_NAME as ELECTRONICS_DOCUMENT_NAME };
+export default model(DocumentName.ELECTRONICS, electronicsSchema);

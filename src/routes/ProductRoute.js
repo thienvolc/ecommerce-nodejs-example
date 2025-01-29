@@ -4,14 +4,15 @@ import authentication from '../middlewares/authentication.js';
 
 const router = Router();
 
-router.route('/product')
+router
     .get('/:id', ProductController.getProductById)
     .get('', ProductController.getAllProducts)
     .get('/search/:search', ProductController.searchProducts);
 
-router.route('/product')
-    .use(authentication)
-    .post(ProductController.createProduct)
+router.use(authentication)
+
+router
+    .post('', ProductController.createProduct)
     .patch('/:id', ProductController.updateProduct)
     .post('/unpublish/:id', ProductController.unpublishProduct)
     .post('/publish/:id', ProductController.publishProduct)

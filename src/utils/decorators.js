@@ -1,13 +1,15 @@
 export class StaticMethodDecorator {
+    #decorator;
+
     constructor(decorator) {
-        this.decorator = decorator;
+        this.#decorator = decorator;
     }
 
     decorateAllStaticMethods = (Class) => {
         return new Proxy(Class, {
             get: (target, property) => {
                 if (StaticMethodDecorator.isStaticMethod(target, property)) {
-                    return this.decorator(target[property]);
+                    return this.#decorator(target[property]);
                 }
                 return target[property];
             },

@@ -1,8 +1,5 @@
 import { model, Schema } from 'mongoose';
-import { USER_DOCUMENT_NAME, PRODUCT_DOCUMENT_NAME } from './index.js';
-
-const COLLECTION_NAME = 'shops';
-const DOCUMENT_NAME = 'Shop';
+import { DocumentName, CollectionName } from './constants/index.js';
 
 const shopSchema = new Schema(
     {
@@ -30,8 +27,8 @@ const shopSchema = new Schema(
             maxlength: 250,
         },
         ownerId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: USER_DOCUMENT_NAME,
+            type: Schema.Types.ObjectId,
+            ref: DocumentName.USER,
             required: [true, 'Shop owner is required'],
         },
         contact: {
@@ -54,8 +51,8 @@ const shopSchema = new Schema(
         },
         products: [
             {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: PRODUCT_DOCUMENT_NAME,
+                type: Schema.Types.ObjectId,
+                ref: DocumentName.PRODUCT,
             },
         ],
         rating: {
@@ -69,11 +66,10 @@ const shopSchema = new Schema(
             default: true,
         },
     },
-    { timestamps: true, collection: COLLECTION_NAME },
+    { timestamps: true, collection: CollectionName.SHOP },
 );
 
 shopSchema.index({ name: 1, ownerId: 1 }, { unique: true });
 shopSchema.index({ 'contact.email': 1 });
 
-export default Shop = model(DOCUMENT_NAME, shopSchema);
-export { DOCUMENT_NAME as SHOP_DOCUMENT_NAME };
+export default model(DocumentName.SHOP, shopSchema);

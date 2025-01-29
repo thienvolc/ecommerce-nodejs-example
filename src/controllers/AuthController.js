@@ -6,10 +6,13 @@ import { asyncErrorDecorator } from '../helpers/asyncErrorWrapper.js';
 class AuthController {
     // [POST] /user/signup
     static signup = async (req, res, next) => {
-        const authResposne = await AuthService.signup(req.body);
-
-        const response = new CREATED({ message: 'User created successfully', metadata: authResposne });
-        ResponseSender.send(res, response);
+        const authResponse = await AuthService.signup(req.body);
+        try {
+        const response = new CREATED({ message: 'User created successfully', metadata: authResponse });
+            ResponseSender.send(res, response);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     // [POST] /user/login

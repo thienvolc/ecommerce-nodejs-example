@@ -4,18 +4,18 @@ import { castMongooseObjectId } from '../utils/mongooseUtils.js';
 export default class RefreshTokenKeyRepository {
     static create = async (tokenKey) => await RefreshTokenKey.create(tokenKey);
 
-    static findByShopId = async (shopId) => {
-        const filter = { shopId: castMongooseObjectId(shopId) };
+    static findByUserId = async (userId) => {
+        const filter = { userId: castMongooseObjectId(userId) };
         return await RefreshTokenKey.findOne(filter).lean();
     };
 
-    static findByShopIdAndUpdate = async (shopId, update, options = {}) => {
-        const filter = { shopId: castMongooseObjectId(shopId) };
+    static findByUserIdAndUpdate = async (userId, update, options = {}) => {
+        const filter = { userId: castMongooseObjectId(userId) };
         return await RefreshTokenKey.findOneAndUpdate(filter, update, options).lean();
     };
 
-    static deleteByShopId = async (shopId) => {
-        const filter = { shopId: castMongooseObjectId(shopId) };
+    static deleteByUserId = async (userId) => {
+        const filter = { userId: castMongooseObjectId(userId) };
         return await RefreshTokenKey.deleteOne(filter).lean();
     };
 }

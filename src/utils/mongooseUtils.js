@@ -1,5 +1,5 @@
-// import { Types } from 'mongoose';
-// import slugify from 'slugify';
+import { Types } from 'mongoose';
+import slugify from 'slugify';
 // import _ from 'lodash';
 
 const castMongooseObjectId = (id) => new Types.ObjectId(id);
