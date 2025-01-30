@@ -1,13 +1,9 @@
-import { CartRepository, ProductRepository } from '../repositories/index.js';
+import { CartRepository, ProductBaseRepository } from '../repositories/index.js';
 import { NotFoundError } from '../utils/responses/index.js';
 
 export default class CartService {
     static createOrUpdateCart = async ({ userId, product }) => {
-        return await CartRepository.findOneAndUpdate(
-            { cart_userId: userId, cart_state: 'active' },
-            { $setOnInsert: { cart_userId, cart_state: 'active', cart_products: [product] } },
-            { upsert: true, new: true },
-        );
+        return await CartRepository.createOrUpdateCart({ userId, product });
     };
 
     static addToCart = async ({ userId, product }) => {
@@ -23,40 +19,34 @@ export default class CartService {
             : this.pushProductToCart({ userId, product });
     };
 
-    static isProductExistInCart(userCart, product) {
-        return userCart.cart_products.some((p) => p.productId === product.productId);
-    }
+    static isProductExistInCart = (userCart, product) => {
+        return userCart.cart_products.some((p) => isEqualString(p.productId, product.productId));
+    };
 
     static updateCartItemQuantity = async ({ userId, product }) => {
-        return await CartRepository.findOneAndUpdate(
-            { cart_userId: userId, 'cart_products._id': product._id, cart_state: 'active' },
-            { $inc: { 'cart_products.$.product_quantity': product.product_quantity } },
-            { new: true },
-        );
+        return await CartRepository.incrementProductQuantity({ userId, product });
     };
 
-    static pushProductToCart = async ({ userId, product }) => {
-        return await CartRepository.findOneAndUpdate(
-            { cart_userId: userId, cart_state: 'active' },
-            { $push: { cart_products: product } },
-            { new: true },
-        );
-    };
+    static pushProductToCart = async ({ userId, product }) =>
+        await CartRepository.pushProductToCart({ userId, product });
 
     static validateProductOwnership = async ({ productId, shopId }) => {
-        const product = await ProductRepository.findById(productId);
-        if (!product) throw new NotFoundError('Product not found');
-        if (product.product_shopId.toString() !== shopId) throw new Error('Product does not belong to this shop');
+        const product = await ProductBaseRepository.findById(productId);
+        if (!product) {
+            throw new NotFoundError('Product not found');
+        }
+        if (!isEqualString(product.product_shopId, shopId)) {
+            throw new Error('Product does not belong to this shop');
+        }
     };
 
     static removeFromCart = async ({ userId, productId }) => {
-        return await CartRepository.updateOne(
-            { cart_userId: userId, cart_state: 'active' },
-            { $pull: { cart_products: { productId } } },
-        );
+        return await CartRepository.removeProductFromCart({ userId, productId });
     };
 
     static getUserCart = async (userId) => {
         return await CartRepository.findByUserId(userId);
     };
 }
+
+const isEqualString = (a, b) => a.toString() === b.toString();
