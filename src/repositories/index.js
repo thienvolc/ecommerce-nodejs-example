@@ -1,5 +1,6 @@
 export { default as CartRepository } from './CartRepository.js';
 export { default as DiscountRepository } from './DiscountRepository.js';
+export { default as InventoryRepository } from './InventoryRepository.js';
 
 export * from './Product/index.js';
 export { default as RefreshTokenKeyRepository } from './RefreshTokenKeyRepository.js';

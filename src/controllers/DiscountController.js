@@ -72,4 +72,4 @@ class DiscountController {
     };
 }
 
-export default asyncErrorDecorator(DiscountController);
+export default asyncErrorDecorator.decorateAllStaticMethods(DiscountController);
