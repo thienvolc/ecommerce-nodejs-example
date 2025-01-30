@@ -3,36 +3,36 @@ import { DocumentName, CollectionName } from './constants/index.js';
 
 const shopSchema = new Schema(
     {
-        name: {
+        shop_name: {
             type: String,
             required: [true, 'Shop name is required'],
             unique: true,
             trim: true,
         },
-        description: {
+        shop_description: {
             type: String,
             maxlength: [500, 'Description cannot exceed 500 characters'],
             maxlength: 500,
         },
-        logo: {
+        shop_logo: {
             type: String,
             trim: true,
         },
-        banner: {
+        shop_banner: {
             type: String,
         },
-        location: {
+        shop_location: {
             type: String,
             maxlength: [250, 'Location cannot exceed 250 characters'],
             maxlength: 250,
         },
-        ownerId: {
+        shop_ownerId: {
             type: Schema.Types.ObjectId,
             ref: DocumentName.USER,
             required: [true, 'Shop owner is required'],
         },
-        contact: {
-            email: {
+        shop_contact: {
+            shop_email: {
                 type: String,
                 trim: true,
                 lowercase: true,
@@ -41,7 +41,7 @@ const shopSchema = new Schema(
                     message: 'Invalid email format',
                 },
             },
-            phone: {
+            shop_phone: {
                 type: String,
                 validate: {
                     validator: (phone) => /^\+?[0-9]{7,15}$/.test(phone),
@@ -49,19 +49,19 @@ const shopSchema = new Schema(
                 },
             },
         },
-        products: [
+        shop_products: [
             {
                 type: Schema.Types.ObjectId,
                 ref: DocumentName.PRODUCT,
             },
         ],
-        rating: {
+        shop_rating: {
             type: Number,
             min: [0, 'Rating cannot be less than 0'],
             max: [5, 'Rating cannot exceed 5'],
             default: 0,
         },
-        isActive: {
+        shop_isActive: {
             type: Boolean,
             default: true,
         },
