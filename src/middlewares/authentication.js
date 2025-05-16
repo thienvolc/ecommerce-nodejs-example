@@ -1,14 +1,18 @@
-import { Headers } from './../utils/authUtils.js';
-import { extractAccessTokenFromHeaders } from '../utils/jwt/index.js';
-import { asyncErrorWrapper } from './../helpers/asyncErrorWrapper.js';
 import AuthService from './../services/AuthService.js';
 
+import { Headers } from './../utils/authUtils.js';
+import { UnauthorizedError } from './../utils/responses/customErrors.js';
+import { extractAccessTokenFromHeaders } from '../utils/jwt/index.js';
+import { asyncErrorWrapper } from './../helpers/asyncErrorWrapper.js';
+
 class AccessControl {
+    static #authService = AuthService;
+
     static authenticate = async (req, res, next) => {
         const accessToken = this.extractAccessToken(req.headers);
         const userId = this.extractUserId(req.headers);
 
-        const user = await AuthService.verifyAccessToken(accessToken, userId);
+        const user = await this.#authService.verifyAccessToken(accessToken, userId);
 
         this.attachUserToRequest(req, user);
         return next();
@@ -22,7 +26,7 @@ class AccessControl {
 
     static checkAuthorizationHeader = (authHeader) => {
         if (!this.isValidAuthorizationHeader(authHeader)) {
-            throw new AuthFailureError('Authorization header is missing or invalid');
+            throw new UnauthorizedError('Authorization header is missing or invalid');
         }
     };
 
@@ -31,7 +35,7 @@ class AccessControl {
     static extractUserId = (headers) => {
         const userId = headers[Headers.CLIENT_ID];
         if (!userId) {
-            throw new AuthFailureError('Missing or invalid client ID in the request headers');
+            throw new UnauthorizedError('Missing or invalid client ID in the request headers');
         }
         return userId;
     };

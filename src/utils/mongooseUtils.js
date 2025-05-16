@@ -1,23 +1,22 @@
 import { Types } from 'mongoose';
 import slugify from 'slugify';
-// import _ from 'lodash';
 
-const castMongooseObjectId = (id) => new Types.ObjectId(id);
+export const castMongooseObjectId = (id) => new Types.ObjectId(id);
 
-const createProductSlugFromName = (name) => {
+export const createProductSlugFromName = (name) => {
     const timestamps = Date.now();
     const uniqueSlug = name + ' ' + timestamps;
     return slugify(uniqueSlug, { lower: true, strict: true });
 };
 
-const isObject = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
+export const isObject = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
 
-const convertToUpdateNestedObject = (product) => {
+export const convertToUpdateNestedObject = (product) => {
     const updatedProduct = updateNestedObjectParser(product);
     return removeNullAndUndefinedProperties(updatedProduct);
 };
 
-const updateNestedObjectParser = (obj) => {
+export const updateNestedObjectParser = (obj) => {
     const final = {};
 
     if (!isObject(obj)) return obj;
@@ -37,7 +36,7 @@ const updateNestedObjectParser = (obj) => {
     return final;
 };
 
-const removeNullAndUndefinedProperties = (objToClean) => {
+export const removeNullAndUndefinedProperties = (objToClean) => {
     if (isValidObject(objToClean)) {
         Object.keys(objToClean).forEach((key) => {
             if (objToClean[key] == null) {
@@ -47,24 +46,12 @@ const removeNullAndUndefinedProperties = (objToClean) => {
     }
 };
 
-const isValidObject = (obj) => obj && typeof obj === 'object' && Object.keys(obj).length > 0;
+export const isValidObject = (obj) => obj && typeof obj === 'object' && Object.keys(obj).length > 0;
 
-const generateSelectProjectionForFields = (fieldsToSelect = []) =>
+export const generateSelectProjectionForFields = (fieldsToSelect = []) =>
     Object.fromEntries(fieldsToSelect.map((field) => [field, 1]));
 
-const generateUnselectProjectionForFields = (fieldsToExclude = []) =>
+export const generateUnselectProjectionForFields = (fieldsToExclude = []) =>
     Object.fromEntries(fieldsToExclude.map((field) => [field, 0]));
 
-const extractFieldsFromObject = ({ fields = [], object = {} }) => _.pick(object, fields);
-
-export {
-    castMongooseObjectId,
-    createProductSlugFromName,
-    convertToUpdateNestedObject,
-    updateNestedObjectParser,
-    removeNullAndUndefinedProperties,
-    isValidObject,
-    generateSelectProjectionForFields,
-    generateUnselectProjectionForFields,
-    extractFieldsFromObject,
-};
+export const extractFieldsFromObject = ({ fields = [], object = {} }) => _.pick(object, fields);

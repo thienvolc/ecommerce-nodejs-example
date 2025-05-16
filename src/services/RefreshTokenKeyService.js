@@ -1,10 +1,12 @@
 import { RefreshTokenKeyRepository } from '../repositories/index.js';
 import { generateRandomKeyPair, signToken, verifyToken } from '../utils/jwt/index.js';
-import { AuthFailureError, ForbiddenError } from '../utils/responses/index.js';
+import { UnauthorizedError, ForbiddenError } from '../utils/responses/index.js';
 import { selectFieldsFromObject } from '../utils/objectUtils.js';
 import { ACCESS_TOKEN_EXPIRY, REFRESH_TOKEN_EXPIRY } from '../config/jwt/index.js';
 
 export default class RefreshTokenKeyService {
+    static #refreshTokenKeyRepository = RefreshTokenKeyRepository;
+
     static createTokenPairForUser = async (user) => {
         const payload = this.#createTokenPayload(user);
         const keyPair = this.#generateRandomKeyPair();
@@ -14,6 +16,7 @@ export default class RefreshTokenKeyService {
     };
 
     static #createTokenPayload = (user) => selectFieldsFromObject(user, ['_id', 'email']);
+
     static #generateRandomKeyPair = () => generateRandomKeyPair();
 
     static #generateTokenPairFromKeyPair = (payload, keyPair) => {
@@ -24,14 +27,12 @@ export default class RefreshTokenKeyService {
     };
 
     static #signToken = (payload, key, options) => {
-        if (!payload._id) {
-            throw new Error("Missing required field '_id' in payload.");
-        }
+        if (!payload._id) throw new Error("Missing required field '_id' in payload.");
         return signToken(payload, key, options);
     };
 
     static #storeTokenkeyForUser = async (userId, refreshToken, keyPair) => {
-        await RefreshTokenKeyRepository.create({ userId, ...keyPair, refreshToken });
+        await this.#refreshTokenKeyRepository.create({ userId, ...keyPair, refreshToken });
     };
 
     static verifyUserRefreshToken = async (refreshToken, userId) => {
@@ -40,19 +41,18 @@ export default class RefreshTokenKeyService {
     };
 
     static #getTokenKeyByUserId = async (userId) => {
-        const tokenKey = await RefreshTokenKeyRepository.findByUserId(userId);
-        if (!tokenKey) {
-            throw new AuthFailureError('User does not exist');
-        }
+        const tokenKey = await this.#refreshTokenKeyRepository.findByUserId(userId);
+        if (!tokenKey) throw new UnauthorizedError('User does not exist');
+
         return tokenKey;
     };
 
     static #verifyRefreshTokenIntegrity = async (refreshToken, tokenKey) => {
-        if (tokenKey.refreshToken === refreshToken) {
+        if (tokenKey.refreshToken === refreshToken)
             return this.#verifyTokenAndExtractPayload(refreshToken, tokenKey.privateKey);
-        }
+
         await this.#handleReusedRefreshToken(tokenKey, refreshToken);
-        throw new AuthFailureError('Invalid refresh token');
+        throw new UnauthorizedError('Invalid refresh token');
     };
 
     static #verifyTokenAndExtractPayload = (token, key) => verifyToken(token, key);
@@ -71,13 +71,13 @@ export default class RefreshTokenKeyService {
 
     static recordUsedRefreshTokenForUser = async (userId, usedRefreshToken) => {
         const update = { $addToSet: { usedRefreshTokens: usedRefreshToken } };
-        await RefreshTokenKeyRepository.findByUserIdAndUpdate(userId, update);
+        await this.#refreshTokenKeyRepository.findByUserIdAndUpdate(userId, update);
     };
 
     static invalidateTokenKeyOfUser = async (userId) => {
         const keyPair = this.#generateRandomKeyPair();
         const update = { $set: { ...keyPair, refreshToken: null } };
-        await RefreshTokenKeyRepository.findByUserIdAndUpdate(userId, update);
+        await this.#refreshTokenKeyRepository.findByUserIdAndUpdate(userId, update);
     };
 
     static refreshTokenPairForUser = async (user) => {
@@ -89,7 +89,7 @@ export default class RefreshTokenKeyService {
     };
 
     static getKeyPairByUserId = async (userId) => {
-        const tokenKey = await RefreshTokenKeyRepository.findByUserId(userId);
+        const tokenKey = await this.#refreshTokenKeyRepository.findByUserId(userId);
         return this.#extractKeyPair(tokenKey);
     };
 
@@ -100,7 +100,7 @@ export default class RefreshTokenKeyService {
 
     static #updateActiveRefreshTokenByUserId = async (userId, refreshToken) => {
         const update = { $set: { refreshToken } };
-        await RefreshTokenKeyRepository.findByUserIdAndUpdate(userId, update);
+        await this.#refreshTokenKeyRepository.findByUserIdAndUpdate(userId, update);
     };
 
     static verifyAccessToken = async (accessToken, userId) => {

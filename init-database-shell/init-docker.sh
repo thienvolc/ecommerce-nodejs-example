@@ -8,4 +8,3 @@ DOCKER_IMAGE=mongo
 
 docker volume create $VOLUME_NAME 
 docker run -d -p $PORT_MAPPING -v $VOLUME_MAPPING --name $CONTAINER_NAME $DOCKER_IMAGE
-

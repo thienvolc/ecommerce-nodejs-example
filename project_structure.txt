@@ -1,117 +1,118 @@
-.
-├── app.js
-├── config
-│   ├── db
-│   │   ├── DBConfigStrategy.js
-│   │   ├── DBType.js
-│   │   └── index.js
-│   ├── env
-│   │   ├── EnvironmentConfig.js
-│   │   ├── EnvironmentConfigFactory.js
-│   │   └── index.js
-│   ├── index.js
-│   └── jwt
-│       ├── index.js
-│       └── jwt.js
-├── controllers
-│   ├── ApikeyController.js
-│   ├── AuthController.js
-│   ├── CartController.js
-│   ├── DiscountController.js
-│   └── ProductController.js
-├── database
-│   ├── DBConnectionFactory.js
-│   ├── ProxyDBConnection.js
-│   ├── index.js
-│   ├── mongo
-│   │   ├── connection.js
-│   │   └── index.js
-│   ├── mysql
-│   │   ├── connection.js
-│   │   └── index.js
-│   └── redis
-│       ├── connection.js
-│       └── index.js
-├── helpers
-│   └── asyncErrorWrapper.js
-├── middlewares
-│   ├── apiKeyValidator.js
-│   ├── authentication.js
-│   └── errorHandler.js
-├── models
-│   ├── Apikey.js
-│   ├── Cart.js
-│   ├── Discount.js
-│   ├── Inventory.js
-│   ├── Product
-│   │   ├── Clothing.js
-│   │   ├── Electronics.js
-│   │   ├── Furniture.js
-│   │   ├── Product.js
-│   │   └── index.js
-│   ├── RefreshTokenKey.js
-│   ├── Shop.js
-│   ├── User.js
-│   ├── constants
-│   │   ├── apiPermission.js
-│   │   ├── collectionName.js
-│   │   ├── documentName.js
-│   │   ├── index.js
-│   │   └── productType.js
-│   └── index.js
-├── repositories
-│   ├── ApiKeyRepository.js
-│   ├── CartRepository.js
-│   ├── DiscountRepository.js
-│   ├── InventoryRepository.js
-│   ├── Product
-│   │   ├── ProductBaseRepository.js
-│   │   ├── ProductRepositoryBridgeStrategyFactory.js
-│   │   └── index.js
-│   ├── RefreshTokenKeyRepository.js
-│   ├── ShopRepository.js
-│   ├── UserRepository.js
-│   └── index.js
-├── routes
-│   ├── AccessRoute.js
-│   ├── ApikeyRoute.js
-│   ├── CartRoute.js
-│   ├── DiscountRoute.js
-│   ├── ProductRoute.js
-│   └── index.js
-├── server.js
-├── services
-│   ├── ApikeyService.js
-│   ├── AuthService.js
-│   ├── CartService.js
-│   ├── DiscountService.js
-│   ├── InventoryService.js
-│   ├── ProductService.js
-│   ├── RefreshTokenKeyService.js
-│   ├── ShopService.js
-│   └── UserService.js
-├── utils
-│   ├── authUtils.js
-│   ├── decorators.js
-│   ├── http
-│   │   ├── constants
-│   │   │   ├── httpResponseMessages.js
-│   │   │   ├── httpStatusCodes.js
-│   │   │   └── index.js
-│   │   └── index.js
-│   ├── jwt
-│   │   ├── index.js
-│   │   └── jwtHelper.js
-│   ├── mongooseUtils.js
-│   ├── objectUtils.js
-│   └── responses
-│       ├── customErrors.js
-│       ├── errorResponse.js
-│       ├── index.js
-│       ├── responseSender.js
-│       └── successResponse.js
-└── validators
-    ├── AuthValidator.js
-    └── index.js
-
-25 directories, 90 files
+src/
+├─ config/
+│  ├─ db/
+│  │  ├─ DBConfigStrategy.js
+│  │  ├─ DBType.js
+│  │  └─ index.js
+│  ├─ env/
+│  │  ├─ EnvironmentConfig.js
+│  │  ├─ EnvironmentConfigFactory.js
+│  │  └─ index.js
+│  ├─ jwt/
+│  │  ├─ index.js
+│  │  └─ jwt.js
+│  └─ index.js
+├─ controllers/
+│  ├─ ApikeyController.js
+│  ├─ AuthController.js
+│  ├─ CartController.js
+│  ├─ DiscountController.js
+│  ├─ InventoryController.js
+│  ├─ ProductController.js
+│  └─ ShopController.js
+├─ database/
+│  ├─ mongo/
+│  │  ├─ connection.js
+│  │  └─ index.js
+│  ├─ mysql/
+│  │  ├─ connection.js
+│  │  └─ index.js
+│  ├─ redis/
+│  │  ├─ connection.js
+│  │  └─ index.js
+│  ├─ DBConnectionFactory.js
+│  ├─ index.js
+│  └─ ProxyDBConnection.js
+├─ helpers/
+│  └─ asyncErrorWrapper.js
+├─ middlewares/
+│  ├─ validators/
+│  │  ├─ AuthValidator.js
+│  │  └─ index.js
+│  ├─ apiKeyValidator.js
+│  ├─ authentication.js
+│  └─ errorHandler.js
+├─ models/
+│  ├─ constants/
+│  │  ├─ apiPermission.js
+│  │  ├─ collectionName.js
+│  │  ├─ documentName.js
+│  │  ├─ index.js
+│  │  └─ productType.js
+│  ├─ Product/
+│  │  ├─ Clothing.js
+│  │  ├─ Electronics.js
+│  │  ├─ Furniture.js
+│  │  ├─ index.js
+│  │  └─ Product.js
+│  ├─ Apikey.js
+│  ├─ Cart.js
+│  ├─ Discount.js
+│  ├─ index.js
+│  ├─ Inventory.js
+│  ├─ RefreshTokenKey.js
+│  ├─ Shop.js
+│  └─ User.js
+├─ repositories/
+│  ├─ Product/
+│  │  ├─ index.js
+│  │  ├─ ProductBaseRepository.js
+│  │  └─ ProductRepositoryBridgeStrategyFactory.js
+│  ├─ ApiKeyRepository.js
+│  ├─ CartRepository.js
+│  ├─ DiscountRepository.js
+│  ├─ index.js
+│  ├─ InventoryRepository.js
+│  ├─ RefreshTokenKeyRepository.js
+│  ├─ ShopRepository.js
+│  └─ UserRepository.js
+├─ routes/
+│  ├─ AccessRoute.js
+│  ├─ ApikeyRoute.js
+│  ├─ CartRoute.js
+│  ├─ DiscountRoute.js
+│  ├─ index.js
+│  ├─ InventoryRoute.js
+│  └─ ProductRoute.js
+├─ services/
+│  ├─ ApikeyService.js
+│  ├─ AuthService.js
+│  ├─ CartService.js
+│  ├─ DiscountService.js
+│  ├─ InventoryService.js
+│  ├─ ProductService.js
+│  ├─ RefreshTokenKeyService.js
+│  ├─ ShopService.js
+│  └─ UserService.js
+├─ utils/
+│  ├─ http/
+│  │  ├─ constants/
+│  │  │  ├─ httpResponseMessages.js
+│  │  │  ├─ httpStatusCodes.js
+│  │  │  └─ index.js
+│  │  └─ index.js
+│  ├─ jwt/
+│  │  ├─ index.js
+│  │  └─ jwtHelper.js
+│  ├─ responses/
+│  │  ├─ customErrors.js
+│  │  ├─ errorResponse.js
+│  │  ├─ index.js
+│  │  ├─ responseSender.js
+│  │  └─ successResponse.js
+│  ├─ authUtils.js
+│  ├─ decorators.js
+│  ├─ mongooseUtils.js
+│  └─ objectUtils.js
+├─ app.js
+└─ server.js

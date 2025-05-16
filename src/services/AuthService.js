@@ -1,18 +1,35 @@
 import UserService from './UserService.js';
 import RefreshTokenKeyService from './RefreshTokenKeyService.js';
+
 import { selectFieldsFromObject } from '../utils/objectUtils.js';
 
+class AuthResponse {
+    static build(user, tokenPair) {
+        return {
+            user: this.extractUserInfo(user),
+            tokens: tokenPair,
+        };
+    }
+
+    static extractUserInfo(user) {
+        return selectFieldsFromObject(user, ['_id', 'name', 'email']);
+    }
+}
+
 export default class AuthService {
+    static #userService = UserService;
+    static #refreshTokenKeyService = RefreshTokenKeyService;
+
     static signup = async ({ name, email, password }) => {
-        const user = await UserService.createUserWithHashPassword({ name, email, password });
-        const tokenPair = await RefreshTokenKeyService.createTokenPairForUser(user);
-        return this.#buildAuthResponse(user, tokenPair);
+        const user = await this.#userService.createUserWithHashPassword({ name, email, password });
+        const tokenPair = await this.#refreshTokenKeyService.createTokenPairForUser(user);
+        return AuthResponse.build(user, tokenPair);
     };
 
     static login = async ({ email, password }) => {
-        const user = await UserService.authenticateCredentials(email, password);
-        const tokenPair = await RefreshTokenKeyService.refreshTokenPairForUser(user);
-        return this.#buildAuthResponse(user, tokenPair);
+        const user = await this.#userService.authenticateCredentials(email, password);
+        const tokenPair = await this.#refreshTokenKeyService.refreshTokenPairForUser(user);
+        return AuthResponse.build(user, tokenPair);
     };
 
     static loginWithRefreshTokenTracking = async ({ email, password }, refreshToken) => {
@@ -21,17 +38,21 @@ export default class AuthService {
         return authResponse;
     };
 
+    static #trackRefreshTokenUsage = async (userId, refreshToken) => {
+        await this.#refreshTokenKeyService.recordUsedRefreshTokenForUser(userId, refreshToken);
+    };
+
     static handleRefreshToken = async (userId, refreshToken) => {
         const user = await this.#fetchUserAndVerifyRefreshToken(userId, refreshToken);
-        const tokenPair = await RefreshTokenKeyService.refreshTokenPairForUser(user);
+        const tokenPair = await this.#refreshTokenKeyService.refreshTokenPairForUser(user);
         await this.#trackRefreshTokenUsage(user._id, refreshToken);
-        return this.#buildAuthResponse(user, tokenPair);
+        return AuthResponse.build(user, tokenPair);
     };
 
     static #fetchUserAndVerifyRefreshToken = async (userId, refreshToken) => {
         const [user] = await Promise.all([
-            UserService.requireUserById(userId),
-            RefreshTokenKeyService.verifyUserRefreshToken(refreshToken, userId),
+            this.#userService.requireUserById(userId),
+            this.#refreshTokenKeyService.verifyUserRefreshToken(refreshToken, userId),
         ]);
         return user;
     };
@@ -42,25 +63,14 @@ export default class AuthService {
     };
 
     static logoutAllUsers = async (userId) => {
-        await RefreshTokenKeyService.invalidateTokenKeyOfUser(userId);
-        const user = await UserService.requireUserById(userId);
-        await RefreshTokenKeyService.refreshTokenPairForUser(user);
-    };
-
-    static #extractUserInfo = (user) => selectFieldsFromObject(user, ['_id', 'name', 'email']);
-
-    static #buildAuthResponse = (user, tokenPair) => ({
-        user: this.#extractUserInfo(user),
-        tokens: tokenPair,
-    });
-
-    static #trackRefreshTokenUsage = async (userId, refreshToken) => {
-        await RefreshTokenKeyService.recordUsedRefreshTokenForUser(userId, refreshToken);
+        await this.#refreshTokenKeyService.invalidateTokenKeyOfUser(userId);
+        const user = await this.#userService.requireUserById(userId);
+        await this.#refreshTokenKeyService.refreshTokenPairForUser(user);
     };
 
     static verifyAccessToken = async (accessToken, userId) => {
-        const user = await UserService.requireUserById(userId);
-        await RefreshTokenKeyService.verifyAccessToken(accessToken, userId);
+        const user = await this.#userService.requireUserById(userId);
+        await this.#refreshTokenKeyService.verifyAccessToken(accessToken, userId);
         return user;
     };
 }

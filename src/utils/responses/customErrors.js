@@ -7,6 +7,24 @@ class ResponseError extends Error {
     }
 }
 
+export class ForbiddenError extends ResponseError {
+    constructor(message = ResponseMessage.FORBIDDEN, statusCode = StatusCode.FORBIDDEN) {
+        super(message, statusCode);
+    }
+}
+
+export class UnauthorizedError extends ResponseError {
+    constructor(message = ResponseMessage.UNAUTHORIZED, statusCode = StatusCode.UNAUTHORIZED) {
+        super(message, statusCode);
+    }
+}
+
+export class BadRequestError extends ResponseError {
+    constructor(message = ResponseMessage.BAD_REQUEST, statusCode = StatusCode.BAD_REQUEST) {
+        super(message, statusCode);
+    }
+}
+
 export class ConflictRequestError extends ResponseError {
     constructor(message = ResponseMessage.CONFLICT, statusCode = StatusCode.CONFLICT) {
         super(message, statusCode);
@@ -19,26 +37,8 @@ export class InternalServerError extends ResponseError {
     }
 }
 
-export class BadRequestError extends ResponseError {
-    constructor(message = ResponseMessage.BAD_REQUEST, statusCode = StatusCode.BAD_REQUEST) {
-        super(message, statusCode);
-    }
-}
-
-export class AuthFailureError extends ResponseError {
-    constructor(message = ResponseMessage.UNAUTHORIZED, statusCode = StatusCode.UNAUTHORIZED) {
-        super(message, statusCode);
-    }
-}
-
 export class NotFoundError extends ResponseError {
     constructor(message = ResponseMessage.NOT_FOUND, statusCode = StatusCode.NOT_FOUND) {
-        super(message, statusCode);
-    }
-}
-
-export class ForbiddenError extends ResponseError {
-    constructor(message = ResponseMessage.FORBIDDEN, statusCode = StatusCode.FORBIDDEN) {
         super(message, statusCode);
     }
 }

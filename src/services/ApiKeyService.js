@@ -4,10 +4,12 @@ import { ForbiddenError } from '../utils/responses/index.js';
 import { generateRandomKey } from '../utils/authUtils.js';
 
 export default class ApikeyService {
+    static #apikeyRepository = ApikeyRepository;
+
     static createReadWriteKey = async () => {
         const key = generateRandomKey();
         const permissions = [Permissions.READ, Permissions.WRITE];
-        return await ApikeyRepository.create({ key, permissions });
+        return await this.#apikeyRepository.create({ key, permissions });
     };
 
     static verify = async (apikey) => {
@@ -16,7 +18,7 @@ export default class ApikeyService {
     };
 
     static #requireApikey = async (key) => {
-        const apikeyDetails = await ApikeyRepository.findByKey(key);
+        const apikeyDetails = await this.#apikeyRepository.findByKey(key);
         if (!apikeyDetails) {
             throw new ForbiddenError('Invalid API Key');
         }

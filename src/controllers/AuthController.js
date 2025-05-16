@@ -1,6 +1,6 @@
 import AuthService from '../services/AuthService.js';
 import { ResponseSender, CREATED, OK } from '../utils/responses/index.js';
-import { getRefreshTokenFromHeaders } from '../utils/jwt/index.js';
+import { extractRefreshTokenFromHeaders } from '../utils/jwt/index.js';
 import { asyncErrorDecorator } from '../helpers/asyncErrorWrapper.js';
 
 class AuthController {
@@ -17,7 +17,7 @@ class AuthController {
 
     // [POST] /user/login
     static login = async (req, res, next) => {
-        const refreshToken = getRefreshTokenFromHeaders(req.headers);
+        const refreshToken = extractRefreshTokenFromHeaders(req.headers);
         const authResponse = refreshToken
             ? await AuthService.loginWithRefreshTokenTracking(req.body, refreshToken)
             : await AuthService.login(req.body);
@@ -28,7 +28,7 @@ class AuthController {
 
     // [POST] /user/refresh-token
     static handleRefreshToken = async (req, res, next) => {
-        const refreshToken = getRefreshTokenFromHeaders(req.headers);
+        const refreshToken = extractRefreshTokenFromHeaders(req.headers);
         const authResponse = await AuthService.handleRefreshToken(req.body.userId, refreshToken);
 
         const response = new OK({ message: 'Token refreshed successfully', metadata: authResponse });
@@ -37,7 +37,7 @@ class AuthController {
 
     // [POST] /user/logout
     static logout = async (req, res, next) => {
-        const refreshToken = getRefreshTokenFromHeaders(req.headers);
+        const refreshToken = extractRefreshTokenFromHeaders(req.headers);
         refreshToken
             ? await AuthService.logoutAllUsersWithRefreshTokenTracking(req.body.userId, refreshToken)
             : await AuthService.logoutAllUsers(req.body.userId);

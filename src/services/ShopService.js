@@ -1,23 +1,15 @@
 import { ShopRepository } from '../repositories/index.js';
 
 export default class ShopService {
-    static createShop = async (shop) => {
-        return await ShopRepository.create(shop);
-    };
+    static #shopRepository = ShopRepository;
 
-    static findByEmail = async (email) => {
-        return await ShopRepository.findByEmail(email);
-    };
+    static createShop = async (shop) => await this.#shopRepository.create(shop);
 
-    static getAllShops = async ({ name }) => {
-        return await ShopRepository.findByName(name);
-    };
+    static findByEmail = async (email) => await this.#shopRepository.findByEmail(email);
 
-    static getShopById = async (id) => {
-        return await ShopRepository.findById(id);
-    };
+    static getAllShops = async ({ name }) => await this.#shopRepository.findByName(name);
 
-    static getShopByOwnerId = async (ownerId) => {
-        return await ShopRepository.getShopByOwnerId(ownerId);
-    };
+    static getShopById = async (id) => await this.#shopRepository.findById(id);
+
+    static getShopByOwnerId = async (ownerId) => await this.#shopRepository.getShopByOwnerId(ownerId);
 }
